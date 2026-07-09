@@ -8,6 +8,7 @@ export default function App() {
         frameBorder="0"
         allow="autoplay; fullscreen; xr-spatial-tracking; accelerometer; gyroscope"
       />
+      <div className="spline-badge-mask" aria-hidden="true" />
     </main>
   );
 }
