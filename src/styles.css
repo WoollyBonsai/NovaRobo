@@ -36,3 +36,28 @@ body {
   z-index: 2;
   pointer-events: none;
 }
+
+.loader-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: #000;
+  z-index: 3;
+}
+
+.loader-image {
+  width: min(240px, 52vw);
+  height: auto;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.loader-percentage {
+  margin-top: 18px;
+  color: #fff;
+  font-size: clamp(1rem, 2.2vw, 1.4rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
