@@ -5,6 +5,14 @@ export default function App() {
   const [progress, setProgress] = useState(0);
   const [isIframeReady, setIsIframeReady] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const navItems = [
+    'About Novarobo',
+    'Projects',
+    'Achievements',
+    'Services',
+    'Testimonials',
+    'Contact us',
+  ];
 
   useEffect(() => {
     const intervalId = window.setInterval(() => {
@@ -29,6 +37,16 @@ export default function App() {
 
   return (
     <main className="app-shell" aria-label="Spline robot arm landing page">
+      <nav className="site-nav" aria-label="Primary">
+        <div className="site-brand">NOVAROBO</div>
+        <div className="site-nav-links">
+          {navItems.map((item) => (
+            <a key={item} className="site-nav-link" href="#">
+              {item}
+            </a>
+          ))}
+        </div>
+      </nav>
       <iframe
         className="spline-frame"
         src="https://my.spline.design/robotarm-dGeMfZX19JuyBr3QIR55NJ6g/"
