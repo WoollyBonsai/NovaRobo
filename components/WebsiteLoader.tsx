@@ -10,12 +10,13 @@ const MINIMUM_DURATION = 8200;
 const EXIT_DURATION = 850;
 
 export default function WebsiteLoader({ applicationReady }: WebsiteLoaderProps) {
-  const startedAt = useRef(Date.now());
+  const startedAt = useRef(0);
   const [assetsReady, setAssetsReady] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
+    startedAt.current = Date.now();
     let isMounted = true;
     const logo = new Image();
     logo.src = '/nova-robo-logo.png';

@@ -1,41 +1,67 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import WebsiteLoader from '../components/WebsiteLoader';
+import { StoreProvider } from './context/StoreContext';
+import Navbar from './components/Navbar';
+import HeroStage from './components/HeroStage';
+import BrandShowcase from './components/BrandShowcase';
+import CatalogueModule from './components/CatalogueModule';
+import ComponentsStoreModule from './components/ComponentsStoreModule';
+import NovaLabModule from './components/NovaLabModule';
+import Footer from './components/Footer';
+
+// Modals
+import ProductDetailModal from './components/ProductDetailModal';
+import CartDrawer from './components/CartDrawer';
+import CheckoutModal from './components/CheckoutModal';
+import CustomerAccountModal from './components/CustomerAccountModal';
+import CustomProjectModal from './components/CustomProjectModal';
+import SupportModal from './components/SupportModal';
+import AdminDashboardModal from './components/AdminDashboardModal';
 
 export default function App() {
   const [isIframeReady, setIsIframeReady] = useState(false);
-  const navItems = [
-    'About Novarobo',
-    'Projects',
-    'Achievements',
-    'Services',
-    'Testimonials',
-    'Contact us',
-  ];
 
   return (
-    <main className="app-shell" aria-label="Spline robot arm landing page">
-      <WebsiteLoader applicationReady={isIframeReady} />
-      <nav className="site-nav" aria-label="Primary">
-        <div className="site-brand">NOVAROBO</div>
-        <div className="site-nav-links">
-          {navItems.map((item) => (
-            <a key={item} className="site-nav-link" href="#">
-              {item}
-            </a>
-          ))}
-        </div>
-      </nav>
-      <iframe
-        className="spline-frame"
-        src="https://my.spline.design/robotarm-dGeMfZX19JuyBr3QIR55NJ6g/"
-        title="Spline robot arm"
-        frameBorder="0"
-        onLoad={() => setIsIframeReady(true)}
-        allow="autoplay; fullscreen; xr-spatial-tracking; accelerometer; gyroscope"
-      />
-      <div className="spline-badge-mask" aria-hidden="true" />
-    </main>
+    <StoreProvider>
+      <div className="min-h-screen bg-background text-foreground selection:bg-accent selection:text-background font-sans relative">
+        {/* Preserved Fullscreen System Loader */}
+        <WebsiteLoader applicationReady={isIframeReady} />
+
+        {/* Global Navigation */}
+        <Navbar />
+
+        {/* Main Content Sections */}
+        <main>
+          {/* Hero & 3D Spline Robotic Arm Stage */}
+          <HeroStage onIframeReady={() => setIsIframeReady(true)} />
+
+          {/* Brand Showcase & Engineering Transparency */}
+          <BrandShowcase />
+
+          {/* Robotics & Automation Catalogue */}
+          <CatalogueModule />
+
+          {/* Electronic Components Store */}
+          <ComponentsStoreModule />
+
+          {/* Nova Robo Lab: Documentation & Tutorials */}
+          <NovaLabModule />
+        </main>
+
+        {/* Global Hardware Footer */}
+        <Footer />
+
+        {/* Interactive Modals & Drawers */}
+        <ProductDetailModal />
+        <CartDrawer />
+        <CheckoutModal />
+        <CustomerAccountModal />
+        <CustomProjectModal />
+        <SupportModal />
+        <AdminDashboardModal />
+      </div>
+    </StoreProvider>
   );
 }
