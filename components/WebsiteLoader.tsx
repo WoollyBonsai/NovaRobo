@@ -1,54 +1,63 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 
 type WebsiteLoaderProps = {
   applicationReady: boolean;
 };
 
-const MINIMUM_DURATION = 8200;
-const EXIT_DURATION = 850;
+const MIN_INTRO_DURATION = 1600; // 1.6s minimum tech intro
+const MAX_FALLBACK_DURATION = 2400; // 2.4s absolute maximum timeout guarantee
+const EXIT_DURATION = 650;
 
 export default function WebsiteLoader({ applicationReady }: WebsiteLoaderProps) {
   const startedAt = useRef(0);
-  const [assetsReady, setAssetsReady] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
-  useEffect(() => {
-    startedAt.current = Date.now();
-    let isMounted = true;
-    const logo = new Image();
-    logo.src = '/nova-robo-logo.png';
-
-    Promise.all([
-      logo.decode().catch(() => undefined),
-      document.fonts?.ready ?? Promise.resolve(),
-    ]).then(() => {
-      if (isMounted) {
-        setAssetsReady(true);
-      }
+  const dismissLoader = useCallback(() => {
+    setIsExiting((prev) => {
+      if (prev) return true;
+      window.setTimeout(() => setIsVisible(false), EXIT_DURATION);
+      return true;
     });
-
-    return () => {
-      isMounted = false;
-    };
   }, []);
 
   useEffect(() => {
-    if (!assetsReady || !applicationReady) {
-      return;
-    }
+    startedAt.current = Date.now();
 
-    const elapsed = Date.now() - startedAt.current;
-    const remaining = Math.max(MINIMUM_DURATION - elapsed, 0);
-    const completeTimer = window.setTimeout(() => {
-      setIsExiting(true);
-      window.setTimeout(() => setIsVisible(false), EXIT_DURATION);
+    // Absolute fallback: NEVER stay infinite under any condition
+    const safetyTimer = window.setTimeout(() => {
+      dismissLoader();
+    }, MAX_FALLBACK_DURATION);
+
+    // Keyboard listener: Escape, Enter, or Space skips loader immediately
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') {
+        dismissLoader();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.clearTimeout(safetyTimer);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [dismissLoader]);
+
+  // If applicationReady becomes true, finish after min intro duration
+  useEffect(() => {
+    if (!applicationReady) return;
+
+    const elapsed = Date.now() - (startedAt.current || Date.now());
+    const remaining = Math.max(MIN_INTRO_DURATION - elapsed, 0);
+
+    const timer = window.setTimeout(() => {
+      dismissLoader();
     }, remaining);
 
-    return () => window.clearTimeout(completeTimer);
-  }, [applicationReady, assetsReady]);
+    return () => window.clearTimeout(timer);
+  }, [applicationReady, dismissLoader]);
 
   if (!isVisible) {
     return null;
@@ -56,10 +65,12 @@ export default function WebsiteLoader({ applicationReady }: WebsiteLoaderProps) 
 
   return (
     <div
-      className={`website-loader${isExiting ? ' website-loader--exiting' : ''}`}
+      onClick={dismissLoader}
+      className={`website-loader cursor-pointer select-none${isExiting ? ' website-loader--exiting' : ''}`}
       role="status"
       aria-live="polite"
-      aria-label="Initializing Novarobo"
+      aria-label="Initializing Novarobo - Click anywhere to skip"
+      title="Click anywhere to enter Nova Robo"
     >
       <div className="loader-ambient loader-ambient--top" />
       <div className="loader-ambient loader-ambient--bottom" />
@@ -68,7 +79,7 @@ export default function WebsiteLoader({ applicationReady }: WebsiteLoaderProps) 
       <div className="loader-stage">
         <div className="loader-brandmark">
           <div className="loader-logo-halo" />
-          <img className="loader-logo" src="/nova-robo-logo.png" alt="" />
+          <img className="loader-logo" src="/nova-robo-logo.png" alt="Nova Robo" />
         </div>
 
         <div className="loader-network" aria-hidden="true">
@@ -107,7 +118,7 @@ export default function WebsiteLoader({ applicationReady }: WebsiteLoaderProps) 
 
       <div className="loader-status" aria-hidden="true">
         <span className="loader-status-dot" />
-        <span>INITIALIZING SYSTEM</span>
+        <span>INITIALIZING SYSTEM · CLICK TO ENTER</span>
       </div>
       <div className="loader-index" aria-hidden="true">NVB / 01</div>
     </div>

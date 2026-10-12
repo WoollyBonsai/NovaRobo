@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import WebsiteLoader from '../components/WebsiteLoader';
 import { StoreProvider } from './context/StoreContext';
 import Navbar from './components/Navbar';
@@ -22,6 +22,13 @@ import AdminDashboardModal from './components/AdminDashboardModal';
 
 export default function App() {
   const [isIframeReady, setIsIframeReady] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsIframeReady(true);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <StoreProvider>
