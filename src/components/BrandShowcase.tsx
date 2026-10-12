@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import ScrollReveal from './ScrollReveal';
 import {
   ShieldCheck,
   Cpu,
@@ -51,91 +52,106 @@ export default function BrandShowcase() {
   return (
     <section id="showcase" className="py-24 bg-background relative border-t border-card-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-accent/10 border border-accent/30 text-accent font-mono text-xs uppercase tracking-widest font-bold">
-            <Zap className="w-3.5 h-3.5" />
-            ENGINEERING TRANSPARENCY
-          </div>
-          <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight font-sans text-foreground">
-            Built by Hardware Engineers, <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent via-sky-300 to-blue-400">
-              For Groundbreaking Automation.
-            </span>
-          </h2>
-          <p className="text-sm sm:text-base text-muted font-sans leading-relaxed">
-            Nova Robo bridges the gap between digital simulation and physical reality. We engineer transparent,
-            open-architecture robotics with zero black boxes, complete CAD documentation, and modular repairability.
-          </p>
-        </div>
+        {/* Section Header with PCB Track */}
+        <ScrollReveal>
+          <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
+            <div className="flex items-center justify-center gap-3">
+              <div className="hidden sm:flex items-center gap-1.5 opacity-60">
+                <span className="pcb-via" />
+                <div className="w-12 h-[1.5px] bg-gradient-to-r from-copper to-accent" />
+              </div>
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-card-elevated border border-copper/35 text-copper font-mono text-xs uppercase tracking-widest font-bold shadow-sm">
+                <span className="w-1.5 h-1.5 rounded-full bg-copper animate-pulse" />
+                <span>ENGINEERING TRANSPARENCY</span>
+              </div>
+              <div className="hidden sm:flex items-center gap-1.5 opacity-60">
+                <div className="w-12 h-[1.5px] bg-gradient-to-l from-copper to-accent" />
+                <span className="pcb-via" />
+              </div>
+            </div>
 
-        {/* 4 Pillars Grid */}
+            <div className="pcb-silkscreen text-[10px] text-muted/60 uppercase">
+              // HARDWARE ARCHITECTURE // ZERO BLACK BOXES // OPEN SCHEMATICS
+            </div>
+
+            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight font-sans text-foreground">
+              Built by Hardware Engineers, <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent via-sky-300 to-copper">
+                For Groundbreaking Automation.
+              </span>
+            </h2>
+            <p className="text-sm sm:text-base text-muted font-sans leading-relaxed">
+              Nova Robo bridges the gap between digital simulation and physical reality. We engineer transparent,
+              open-architecture robotics with zero black boxes, complete CAD documentation, and modular repairability.
+            </p>
+          </div>
+        </ScrollReveal>
+
+        {/* 4 Pillars Grid with Scroll Reveal */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {pillars.map((pillar, idx) => {
             const Icon = pillar.icon;
             return (
-              <div
-                key={idx}
-                className="group relative rounded-2xl bg-card/60 border border-card-border p-6 flex flex-col justify-between hover:border-accent/50 hover:bg-card hover:shadow-glow-sm transition-all duration-300"
-              >
-                <div className="space-y-4">
-                  <div className="w-12 h-12 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent group-hover:scale-105 transition-transform">
-                    <Icon className="w-6 h-6" />
+              <ScrollReveal key={idx} delay={idx * 90}>
+                <div className="group relative rounded-2xl bg-card border border-card-border p-6 flex flex-col justify-between hover:border-copper/60 hover:bg-card-elevated hover:shadow-glow-sm transition-all duration-300 pcb-copper-border h-full">
+                  <div className="space-y-4">
+                    <div className="w-12 h-12 rounded-xl bg-card-elevated border border-copper/30 flex items-center justify-center text-copper group-hover:scale-105 transition-transform shadow-inner">
+                      <Icon className="w-6 h-6" />
+                    </div>
+
+                    <div>
+                      <h3 className="text-lg font-bold font-sans text-foreground">{pillar.title}</h3>
+                      <div className="text-xs font-mono text-copper mt-0.5">{pillar.tagline}</div>
+                    </div>
+
+                    <p className="text-xs text-muted leading-relaxed font-sans">{pillar.desc}</p>
                   </div>
 
-                  <div>
-                    <h3 className="text-lg font-bold font-sans text-foreground">{pillar.title}</h3>
-                    <div className="text-xs font-mono text-accent mt-0.5">{pillar.tagline}</div>
+                  <div className="pt-6 mt-6 border-t border-card-border flex items-baseline justify-between font-mono">
+                    <span className="text-2xl font-bold text-foreground group-hover:text-copper transition-colors">
+                      {pillar.metric}
+                    </span>
+                    <span className="text-[10px] text-muted uppercase tracking-wider">{pillar.label}</span>
                   </div>
-
-                  <p className="text-xs text-muted leading-relaxed font-sans">{pillar.desc}</p>
                 </div>
-
-                <div className="pt-6 mt-6 border-t border-card-border flex items-baseline justify-between font-mono">
-                  <span className="text-2xl font-bold text-foreground group-hover:text-accent transition-colors">
-                    {pillar.metric}
-                  </span>
-                  <span className="text-[10px] text-muted uppercase tracking-wider">{pillar.label}</span>
-                </div>
-              </div>
+              </ScrollReveal>
             );
           })}
         </div>
 
         {/* Institutional Credentials & Compliance Bar */}
-        <div className="mt-16 rounded-2xl bg-card/40 border border-card-border p-6 flex flex-col md:flex-row items-center justify-between gap-6 backdrop-blur-sm">
-          <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 rounded-xl bg-accent/10 border border-accent/30 flex items-center justify-center text-accent shrink-0">
-              <ShieldCheck className="w-6 h-6" />
-            </div>
-            <div>
-              <div className="text-sm font-bold font-mono text-foreground flex items-center gap-2">
-                <span>GOVERNMENT OF INDIA MSME CERTIFIED</span>
-                <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-                  VERIFIED
-                </span>
+        <ScrollReveal delay={200}>
+          <div className="mt-16 rounded-2xl bg-card border border-card-border p-6 flex flex-col md:flex-row items-center justify-between gap-6 backdrop-blur-sm pcb-copper-border">
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 rounded-xl bg-copper/15 border border-copper/35 flex items-center justify-center text-copper shrink-0 shadow-inner">
+                <ShieldCheck className="w-6 h-6" />
               </div>
-              <div className="text-xs font-mono text-muted">
-                UDYAM-MP-41-0055015 · Kalchuri LNCT Group Incubation Facility, Central India Tech Corridor
+              <div>
+                <h4 className="text-base font-bold font-sans text-foreground">
+                  Govt. Recognized Hardware Facility &amp; ISO Calibrated
+                </h4>
+                <p className="text-xs text-muted font-sans mt-0.5">
+                  Operating out of the Kalchuri LNCT Group Incubation Centre, Central India Tech Corridor.
+                </p>
               </div>
             </div>
-          </div>
 
-          <div className="flex items-center gap-6 font-mono text-xs text-muted">
-            <div className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-accent" />
-              <span>ISO 9283 Testing</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-accent" />
-              <span>Open-Source ROS2</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-accent" />
-              <span>Full STEP/CAD Exports</span>
+            <div className="flex flex-wrap items-center gap-6 font-mono text-xs">
+              <div className="flex items-center space-x-2 text-foreground">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                <span>MSME UDYAM-MP-41-0055015</span>
+              </div>
+              <div className="flex items-center space-x-2 text-foreground">
+                <Award className="w-4 h-4 text-accent" />
+                <span>ISO 9283 Repeatability Audit</span>
+              </div>
+              <div className="flex items-center space-x-2 text-foreground">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                <span>CE / RoHS Certified Components</span>
+              </div>
             </div>
           </div>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );

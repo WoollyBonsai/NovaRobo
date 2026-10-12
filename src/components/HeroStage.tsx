@@ -64,7 +64,7 @@ export default function HeroStage({ onIframeReady }: HeroStageProps) {
       <div
         className="absolute inset-0 pointer-events-none z-10"
         style={{
-          background: 'radial-gradient(circle at 50% 30%, transparent 40%, rgba(5, 11, 18, 0.85) 90%)',
+          background: 'radial-gradient(circle at 50% 30%, transparent 40%, rgba(18, 22, 31, 0.88) 90%)',
         }}
       />
 

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import '../src/styles.css';
+import { StoreProvider } from '../src/context/StoreContext';
 
 export const metadata: Metadata = {
   title: 'Nova Robo — Hardware Innovation, Robotics and Automation',
@@ -17,7 +18,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark scroll-smooth">
-      <body className="bg-[#050b12] text-[#e8f7ff] antialiased">{children}</body>
+      <body className="bg-background text-foreground antialiased selection:bg-accent selection:text-background">
+        <StoreProvider>{children}</StoreProvider>
+      </body>
     </html>
   );
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { useStore } from '../context/StoreContext';
 import {
   ShoppingBag,
@@ -148,13 +149,14 @@ export default function Navbar() {
           </button>
 
           {/* Admin Dashboard */}
-          <button
-            onClick={openAdmin}
-            className="p-2 rounded-xl text-muted hover:text-foreground hover:bg-card border border-transparent hover:border-card-border transition-colors"
-            title="Admin & Operations Portal"
+          <Link
+            href="/admin"
+            className="p-2 rounded-xl text-muted hover:text-foreground hover:bg-card border border-transparent hover:border-card-border transition-colors flex items-center gap-1"
+            title="Admin & Operations Portal (/admin - Passkey: notadmin)"
           >
-            <Shield className="w-4 h-4 text-emerald-400" />
-          </button>
+            <Shield className="w-4 h-4 text-copper" />
+            <span className="hidden xl:inline text-[10px] font-mono font-bold text-copper uppercase">Admin</span>
+          </Link>
 
           {/* Wishlist */}
           <button
@@ -248,6 +250,13 @@ export default function Navbar() {
           >
             <LifeBuoy className="w-4 h-4 text-accent" /> Engineering Support
           </button>
+          <Link
+            href="/admin"
+            onClick={() => setMobileMenuOpen(false)}
+            className="w-full text-left px-3 py-2 rounded-lg text-sm font-mono text-copper hover:text-amber-300 hover:bg-white/5 flex items-center gap-2 border-t border-card-border/60 pt-3"
+          >
+            <Shield className="w-4 h-4 text-copper" /> Admin &amp; Product Management (/admin)
+          </Link>
         </div>
       )}
     </header>

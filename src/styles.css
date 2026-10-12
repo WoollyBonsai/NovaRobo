@@ -3,11 +3,16 @@
 @tailwind utilities;
 
 :root {
-  --background: #050b12;
-  --foreground: #e8f7ff;
-  --muted: #8ca8b8;
-  --accent: #5ee7ff;
-  --line: rgba(94, 231, 255, 0.2);
+  --background: #12161f;
+  --foreground: #f1f5f9;
+  --muted: #94a3b8;
+  --accent: #38bdf8;
+  --copper: #f59e0b;
+  --copper-gold: #fbbf24;
+  --line: rgba(56, 189, 248, 0.2);
+  --card: #1a202c;
+  --card-elevated: #222a3a;
+  --card-border: rgba(148, 163, 184, 0.18);
 }
 
 * {
@@ -59,7 +64,7 @@ body {
   bottom: 0;
   width: 200px;
   height: 52px;
-  background: #050b12;
+  background: #12161f;
   pointer-events: none;
 }
 
@@ -71,8 +76,8 @@ body {
   display: grid;
   place-items: center;
   overflow: hidden;
-  background: #03080d;
-  transition: opacity var(--loader-exit-duration, 850ms) ease;
+  background: #10141c;
+  transition: opacity var(--loader-exit-duration, 650ms) ease;
 }
 
 .website-loader--exiting {
@@ -216,5 +221,95 @@ body {
 @media (max-width: 720px) {
   .loader-network-node--mobile-hidden {
     display: none;
+  }
+}
+
+/* ========================================================
+   PCB TRACK THEMES & HARDWARE SILKSCREEN ACCENTS
+   ======================================================== */
+
+.pcb-grid-texture {
+  background-image: 
+    radial-gradient(circle at 1px 1px, rgba(148, 163, 184, 0.08) 1px, transparent 0),
+    linear-gradient(to right, rgba(148, 163, 184, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.03) 1px, transparent 1px);
+  background-size: 32px 32px, 64px 64px, 64px 64px;
+}
+
+.pcb-silkscreen {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 10px;
+  color: #f59e0b;
+}
+
+.pcb-via {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid #f59e0b;
+  background: #12161f;
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
+  position: relative;
+}
+
+.pcb-via::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #fbbf24;
+}
+
+.pcb-copper-border {
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  box-shadow: inset 0 0 12px rgba(245, 158, 11, 0.03);
+}
+
+.pcb-copper-border:hover {
+  border-color: rgba(245, 158, 11, 0.5);
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.12), inset 0 0 16px rgba(245, 158, 11, 0.06);
+}
+
+/* ========================================================
+   SCROLL REVEAL ANIMATIONS (IntersectionObserver & CSS View-Timeline)
+   ======================================================== */
+
+.pcb-scroll-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.pcb-scroll-reveal.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    .pcb-scroll-auto {
+      animation: pcbRevealEntry auto linear backwards;
+      animation-timeline: view();
+      animation-range: entry 5% entry 35%;
+    }
+
+    @keyframes pcbRevealEntry {
+      from {
+        opacity: 0;
+        transform: translateY(32px) scale(0.985);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
   }
 }

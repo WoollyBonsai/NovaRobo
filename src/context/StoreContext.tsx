@@ -7,6 +7,8 @@ import {
   Order,
   CustomEnquiry,
   SupportTicket,
+  PRODUCTS,
+  COMPONENTS,
   INITIAL_ORDERS,
   INITIAL_ENQUIRIES,
   INITIAL_SUPPORT_TICKETS,
@@ -102,6 +104,22 @@ interface StoreContextType {
   openAdmin: () => void;
   closeAdmin: () => void;
 
+  // Catalog Products & Components Management
+  products: Product[];
+  components: ComponentItem[];
+  addProduct: (prod: Product) => void;
+  updateProduct: (id: string, updated: Partial<Product>) => void;
+  deleteProduct: (id: string) => void;
+  addComponent: (comp: ComponentItem) => void;
+  updateComponent: (id: string, updated: Partial<ComponentItem>) => void;
+  deleteComponent: (id: string) => void;
+  resetCatalog: () => void;
+
+  // Admin Auth Gate (Password: "notadmin")
+  isAdminAuthenticated: boolean;
+  adminLogin: (password: string) => boolean;
+  adminLogout: () => void;
+
   // Notification Toast
   toastMessage: string | null;
   showToast: (msg: string) => void;
@@ -150,6 +168,36 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     }
   });
 
+  const [products, setProducts] = useState<Product[]>(() => {
+    if (typeof window === 'undefined') return PRODUCTS;
+    try {
+      const saved = localStorage.getItem('novarobo_products');
+      return saved ? JSON.parse(saved) : PRODUCTS;
+    } catch {
+      return PRODUCTS;
+    }
+  });
+
+  const [components, setComponents] = useState<ComponentItem[]>(() => {
+    if (typeof window === 'undefined') return COMPONENTS;
+    try {
+      const saved = localStorage.getItem('novarobo_components');
+      return saved ? JSON.parse(saved) : COMPONENTS;
+    } catch {
+      return COMPONENTS;
+    }
+  });
+
+  // Admin authentication (Password: "notadmin")
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    try {
+      return sessionStorage.getItem('novarobo_admin_auth') === 'true';
+    } catch {
+      return false;
+    }
+  });
+
   const [supportTickets, setSupportTickets] = useState<SupportTicket[]>(INITIAL_SUPPORT_TICKETS);
 
   const [activeSection, setActiveSection] = useState('home');
@@ -189,6 +237,83 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       localStorage.setItem('novarobo_enquiries', JSON.stringify(enquiries));
     } catch {}
   }, [enquiries]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('novarobo_products', JSON.stringify(products));
+    } catch {}
+  }, [products]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('novarobo_components', JSON.stringify(components));
+    } catch {}
+  }, [components]);
+
+  const addProduct = (prod: Product) => {
+    setProducts((prev) => [prod, ...prev]);
+    showToast(`Added robot "${prod.name}" to catalog`);
+  };
+
+  const updateProduct = (id: string, updated: Partial<Product>) => {
+    setProducts((prev) =>
+      prev.map((p) => (p.id === id ? { ...p, ...updated } : p))
+    );
+    showToast(`Updated product #${id}`);
+  };
+
+  const deleteProduct = (id: string) => {
+    setProducts((prev) => prev.filter((p) => p.id !== id));
+    showToast(`Removed product #${id} from catalog`);
+  };
+
+  const addComponent = (comp: ComponentItem) => {
+    setComponents((prev) => [comp, ...prev]);
+    showToast(`Added component "${comp.name}" to store`);
+  };
+
+  const updateComponent = (id: string, updated: Partial<ComponentItem>) => {
+    setComponents((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, ...updated } : c))
+    );
+    showToast(`Updated component #${id}`);
+  };
+
+  const deleteComponent = (id: string) => {
+    setComponents((prev) => prev.filter((c) => c.id !== id));
+    showToast(`Removed component #${id}`);
+  };
+
+  const resetCatalog = () => {
+    setProducts(PRODUCTS);
+    setComponents(COMPONENTS);
+    try {
+      localStorage.removeItem('novarobo_products');
+      localStorage.removeItem('novarobo_components');
+    } catch {}
+    showToast('Factory reset catalog to default specifications');
+  };
+
+  const adminLogin = (password: string): boolean => {
+    if (password === 'notadmin') {
+      setIsAdminAuthenticated(true);
+      try {
+        sessionStorage.setItem('novarobo_admin_auth', 'true');
+      } catch {}
+      showToast('Admin Terminal Unlocked: Root Access Granted');
+      return true;
+    }
+    showToast('Access Denied: Invalid Master Passkey');
+    return false;
+  };
+
+  const adminLogout = () => {
+    setIsAdminAuthenticated(false);
+    try {
+      sessionStorage.removeItem('novarobo_admin_auth');
+    } catch {}
+    showToast('Admin session terminated');
+  };
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -503,6 +628,20 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         isAdminOpen,
         openAdmin,
         closeAdmin,
+
+        products,
+        components,
+        addProduct,
+        updateProduct,
+        deleteProduct,
+        addComponent,
+        updateComponent,
+        deleteComponent,
+        resetCatalog,
+
+        isAdminAuthenticated,
+        adminLogin,
+        adminLogout,
 
         toastMessage,
         showToast,

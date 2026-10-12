@@ -10,6 +10,7 @@ import CatalogueModule from './components/CatalogueModule';
 import ComponentsStoreModule from './components/ComponentsStoreModule';
 import NovaLabModule from './components/NovaLabModule';
 import Footer from './components/Footer';
+import PcbBackground from './components/PcbBackground';
 
 // Modals
 import ProductDetailModal from './components/ProductDetailModal';
@@ -31,8 +32,10 @@ export default function App() {
   }, []);
 
   return (
-    <StoreProvider>
-      <div className="min-h-screen bg-background text-foreground selection:bg-accent selection:text-background font-sans relative">
+    <div className="min-h-screen bg-background text-foreground selection:bg-accent selection:text-background font-sans relative">
+        {/* Animated PCB Circuit Board Background */}
+        <PcbBackground />
+
         {/* Preserved Fullscreen System Loader */}
         <WebsiteLoader applicationReady={isIframeReady} />
 
@@ -69,6 +72,5 @@ export default function App() {
         <SupportModal />
         <AdminDashboardModal />
       </div>
-    </StoreProvider>
   );
 }
