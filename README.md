@@ -25,6 +25,42 @@
 
 ---
 
+## 🌐 Official Web Platform & E-Commerce Storefront (Current Status)
+
+> 📖 **Full Technical Architecture & Guide:** Detailed team documentation is available in [**DOCUMENTATION.md**](./DOCUMENTATION.md).
+
+Nova Robo's official web platform is built with **Next.js 15 (App Router)**, **React 18**, **Tailwind CSS**, and **Spline 3D**. It functions as both a brand showcase and an e-commerce platform for robotics hardware, components, engineering documentation, and institutional order management.
+
+### ⚡ Quick Start for Collaborators
+```bash
+# Install dependencies
+npm install
+
+# Run development server on port 3000
+npm run dev -- -p 3000
+```
+Open [http://localhost:3000](http://localhost:3000) to view the live platform.
+
+### 🔐 Administrative Management Console
+- **URL**: `http://localhost:3000/admin` (or click the **Admin Shield** in the top navigation)
+- **Master Admin Password**: `notadmin`
+- **Capabilities**: Add/edit/delete robots in the catalogue, manage component SKU stock levels with live steppers (`+` / `-`), advance order production pipeline stages, review custom project quotations, and reset to factory defaults. Changes sync instantly across the store via `localStorage`.
+
+### 🛠️ Key Web Modules Implemented
+- **Interactive 3D Hero Stage**: Spline 3D robotic arm model with real-time 6-DOF joint angles telemetry HUD (`J1-J6`).
+- **Aerospace Dark Grey & PCB Visuals**: Dark slate background (`#12161f`) with animated SVG circuit board traces, glowing cyan/copper current packets, and test pads.
+- **Scroll Reveal Animations**: Smooth scroll-driven entrances for all sections and grid items.
+- **Robotics & Automation Catalogue**: Filterable catalog of manipulators, AMRs, and research kits with payload badges and modal specs.
+- **Electronic Components Store**: Filterable store for motor drivers, harmonic drives, and sensors categorized by bus (`CAN-FD`, `EtherCAT`, etc.).
+- **Interactive Product Detail & BOM**: Real-time engineering specs, tolerances, Bill of Materials, CAD (.STEP/.URDF) downloads, and ROS2 Jazzy/Humble launch commands.
+- **Cart & Procurement Checkout**: Multi-step institutional checkout with Net-30 Corporate PO and Lab Invoice support.
+- **Customer Account Portal**: Live 6-stage order tracking (`Fabrication` → `SMT Assembly` → `CNC Milling` → `QA` → `Dispatched` → `Delivered`), wishlist, and custom project tracking.
+- **Custom Project Enquiry Builder**: Client hardware specification builder (payload, reach, environment, budget) with instant quote estimates and 24h SLA.
+- **Nova Robo Lab**: Engineering documentation, ROS2 bringup tutorials, and copyable Python SDK snippets.
+- **Failsafe System Loader**: Network topology loader with a guaranteed 2.4s safety fallback and instant click/key dismiss.
+
+---
+
 # 🚀 About Nova-Robo
 
 Nova-Robo is a **student-led hardware innovation startup** focused on building real-world engineering solutions across **robotics, rocketry, electronics, embedded systems, and aerospace technology**.
